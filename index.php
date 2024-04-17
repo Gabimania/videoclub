@@ -46,7 +46,7 @@ include("./templates/header.php")
                                 </div>
 
                                 <form>
-                                    <p>Please login to your account</p>
+                                    <p>Please , login to your account</p>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <input type="email" name= "email" id="form2Example11" class="form-control" placeholder="Phone number or email address" />

@@ -1,38 +1,37 @@
 <?php
-if (isset($_POST["email"])) {
+session_start();
+if (isset($_SESSION["employee"])) {
+    header("Location: employee.php");
+    exit();
+}
+
+if (isset($_POST["code"])) {
     include("conection.php");
     $name = $_POST["name"];
     $email = $_POST["email"];
-    $pass = $_POST["password"];
-
-    $sql = "insert into user (name, email, password) values (?,?,?)";
-    $pstm = $conn->prepare($sql);
-    $pstm->bindParam(1, $name);
-    $pstm->bindParam(2, $email);
-    $pstm->bindParam(3, $pass);
-    
-
-    try {
-        $pstm->execute();
-        if ($pstm->rowCount() > 0) {
-            header("Location: ./");
-            exit();
-        } else {
-            $error = "Could not get the user";
-        }
-    } catch (PDOException $e) {
-        $error = "Could not create the user" . $e->getMessage();
+    $password = $_POST["password"];
+    $code = $_POST["code"];
+    $sql = "select * from employee where email = ? and password = ? and employeecode = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $email);
+    $stmt->bindParam(2, $password);
+    $stmt->bindParam(3, $code);
+    $stmt->execute();
+    if ($stmt->rowCount() > 0) {
+        $result=$stmt->fetchAll();
+        $_SESSION["employee"] = $name;
+        $_SESSION["idemployee"] = $result[0]["idemployee"];
+        header("Location: employee.php");
+        exit();
+    } else {
+        $error = "Email or password incorrect";
     }
 }
 
 ?>
 
-
-
-
-
 <?php
-include("./templates/header.php");
+include("./templates/header.php")
 ?>
 
 <section class="vh-100" style="background-color: #eee;">
@@ -44,14 +43,14 @@ include("./templates/header.php");
                         <div class="row justify-content-center">
                             <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Employee Login</p>
 
                                 <form action="" method="post" class="mx-1 mx-md-4">
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                         <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                            <input type="text" name="name" id="name" class="form-control" />
+                                            <input type="text" name="name" id="form3Example1c" class="form-control" />
                                             <label class="form-label" for="form3Example1c">Your Name</label>
                                         </div>
                                     </div>
@@ -59,7 +58,7 @@ include("./templates/header.php");
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                         <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                            <input type="email" name="email" id="email" class="form-control" />
+                                            <input type="email" id="form3Example3c" name="email" class="form-control" />
                                             <label class="form-label" for="form3Example3c">Your Email</label>
                                         </div>
                                     </div>
@@ -67,10 +66,11 @@ include("./templates/header.php");
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                                            <input type="password" name="password" id="password" class="form-control password"  />
+                                            <input type="password" name="password" id="password" class="form-control password" />
                                             <label class="form-label" for="form3Example4c">Password</label>
                                         </div>
                                     </div>
+
 
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-key fa-lg me-3 fa-fw"></i>
@@ -79,29 +79,30 @@ include("./templates/header.php");
                                             <label class="form-label" for="form3Example4cd">Repeat your password</label>
                                         </div>
                                     </div>
-
-                                    <div class="form-check d-flex justify-content-center mb-5">
-                                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
-                                        <label class="form-check-label" for="form2Example3">
-                                            I agree all statements in <a href="#!">Terms of service</a>
-                                        </label>
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class='fas fa-user-lock' style='font-size:20px' margin-right: 20px;></i>
+                                        <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                                            <input type="password" name="code" id="form3Example4cd" class="form-control" />
+                                            <label class="form-label" for="form3Example4cd">Identification Code</label>
+                                        </div>
                                     </div>
+
 
                                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg" id="bntregister" disabled>Register</button>
-                                        <?php
-                                        if (isset($error)) {
-                                            echo "<p>" . $error . "</p>";
-                                        }
-                                        ?>
+                                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg" id="bntregister" disabled>Start working</button>
                                     </div>
+                                    <?php
+                                    if (isset($error)) {
+                                        echo "<p>" . $error . "</p>";
+                                    }
+                                    ?>
 
                                 </form>
 
                             </div>
                             <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
 
-                                <img src="./assets/img/walter.webp" class="img-fluid" alt="Sample image">
+                                <img src="./assets/img/theoffice.webp.png" class="img-fluid" alt="Sample image">
 
                             </div>
                         </div>
@@ -111,6 +112,7 @@ include("./templates/header.php");
         </div>
     </div>
 </section>
+
 
 <?php
 include("./templates/footer.php");

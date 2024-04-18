@@ -4,6 +4,10 @@
         header("Location: user.php");
         exit();
     }
+    if (isset($_SESSION["employee"])) {
+        header("Location: employee.php");
+        exit();
+    }
     if (isset($_POST["email"])) {
     
         include("conection.php");
@@ -45,7 +49,7 @@ include("./templates/header.php")
                                     <h4 class="mt-1 mb-5 pb-1">Welcome to Gabimania Videoclub</h4>
                                 </div>
 
-                                <form>
+                                <form action="" method= "post">
                                     <p>Please , login to your account</p>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
@@ -72,6 +76,10 @@ include("./templates/header.php")
                                     <div class="d-flex align-items-center justify-content-center pb-4">
                                         <p class="mb-0 me-2">Don't have an account?</p>
                                        <a href="register.php"> <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">Create new</button></a>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center pb-4">
+                                        <p class="mb-0 me-2">Just for employees</p>
+                                       <a href="loginemployee.php"> <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger" >Identification</button></a>
                                     </div>
 
                                 </form>

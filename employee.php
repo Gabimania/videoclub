@@ -41,16 +41,10 @@ if (isset($_SESSION["employee"])) {
         }
 
         // Permitir ciertos formatos de archivo
-        if (
-            $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-            && $imageFileType != "gif"
-        ) {
-            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-            $uploadOk = 0;
-        }
+       
         //Guardas imagen y actualizas bbddd
         if ($uploadOk == 0) {
-            echo "Sorry, your file was not uploaded.";
+            
             // Si todo está bien, intenta subir el archivo
         } else {
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
@@ -70,7 +64,7 @@ if (isset($_SESSION["employee"])) {
                 // Ejecutar la consulta
                 try {
                     $stmt->execute();
-                    echo "Movie added successfully.";
+                   
                 } catch (PDOException $e) {
                     echo "Error: " . $e->getMessage();
                 }

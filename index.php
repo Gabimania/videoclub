@@ -45,7 +45,7 @@ include("./templates/header.php")
                             <div class="card-body p-md-5 mx-md-4">
 
                                 <div class="text-center">
-                                    <img src="assets/img/peliculas.webp" style="width: 185px;" alt="logo">
+                                    <img src="assets/img/gabimania.jpg" style="width: 250px;" alt="logo">
                                     <h4 class="mt-1 mb-5 pb-1">Welcome to Gabimania Videoclub</h4>
                                 </div>
 

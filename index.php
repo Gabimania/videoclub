@@ -11,6 +11,7 @@
     if (isset($_POST["email"])) {
     
         include("conection.php");
+        $name= $_POST["name"];
         $email = $_POST["email"];
         $password = $_POST["password"];
         $sql = "select * from user where email=? and password=?";
@@ -19,7 +20,8 @@
         $stmt->bindParam(2,$password);
         $stmt->execute();
         if ($stmt->rowCount()>0) {
-            $_SESSION["user"] = $email;
+        
+            $_SESSION["user"] = $name;
             $_SESSION["datos"] = "otros datos";
             header("Location: user.php");
             exit();
@@ -51,10 +53,14 @@ include("./templates/header.php")
 
                                 <form action="" method= "post">
                                     <p>Please , login to your account</p>
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        <input type="text" name= "name" id="form2Example11" class="form-control" placeholder="Username" />
+                                        <label class="form-label" for="form2Example11">Name</label>
+                                    </div>
 
                                     <div data-mdb-input-init class="form-outline mb-4">
                                         <input type="email" name= "email" id="form2Example11" class="form-control" placeholder="Phone number or email address" />
-                                        <label class="form-label" for="form2Example11">Username</label>
+                                        <label class="form-label" for="form2Example11">Email</label>
                                     </div>
 
                                     <div data-mdb-input-init class="form-outline mb-4">

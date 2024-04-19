@@ -6,7 +6,7 @@ if (isset($_SESSION["employee"])) {
         include("conection.php");
 
         $idemployee = $_SESSION["idemployee"];
-
+        $available = true;
        
         $category = $_POST["category"];
         $image = $_FILES["image"]["name"];
@@ -50,7 +50,7 @@ if (isset($_SESSION["employee"])) {
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
                 //echo "The file ". htmlspecialchars( basename( $_FILES["image"]["name"])). " has been uploaded.";
                 // Preparar la consulta SQL para insertar los datos en la tabla de películas
-                $sql = "INSERT INTO film (name,img, idcategory, idemployee) VALUES (?, ?, ?, ?)";
+                $sql = "INSERT INTO film (name, img, idcategory, idemployee, available) VALUES (?, ?, ?, ?,?)";
                 $stmt = $conn->prepare($sql);
     
                 // Vincular los parámetros
@@ -59,6 +59,7 @@ if (isset($_SESSION["employee"])) {
                 $stmt->bindParam(2, $image);
                 $stmt->bindParam(3, $category);
                 $stmt->bindParam(4, $idemployee);
+                $stmt->bindParam(5,$available);
                
     
                 // Ejecutar la consulta

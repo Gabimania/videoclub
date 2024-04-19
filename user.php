@@ -3,6 +3,7 @@ session_start();
 if(isset($_SESSION["user"])){
     $name = $_SESSION["user"];
     $datos = $_SESSION["datos"];
+    $idfilm;
 
    
 
@@ -12,21 +13,6 @@ if(isset($_SESSION["user"])){
 
 include("conection.php");
 
-if(isset($_GET["category"])){
-    $category = $_GET["category"];
-
-    $sql = "SELECT f.name, f.available, f.img, c.name AS category_name 
-            FROM film AS f
-            INNER JOIN category AS c ON f.category_id = c.idcategory 
-            WHERE c.idcategory = ?";
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([$category]);
-    $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo json_encode($movies);
-    exit();
-}
 ?>
 
 <?php
@@ -38,12 +24,49 @@ include("./templates/header.php");
     <hr>
     <h2>What film would you like to rent?</h2>
 </div>
-<button class="category-button" data-category-idcategory="1">Action</button>
-    <button class="category-button" data-category-idcategory="2">Drama</button>
-    <button class="category-button" data-category-idcategory="3">Horror</button>
+
     
    
-    <div id="films-container"></div>
+    <div id="films-container">
+        <?php
+        include("data.php");
+            $sql = "select * from film";
+            $stmt = $conn->prepare($sql);
+            $stmt-> execute();
+            $filmList = $stmt->fetchAll();
+            foreach ($filmList as $film) {
+                ?>
+                <div>
+                    
+                    <h3><?php echo $film['name']; ?></h3>
+                    
+                    <img src="assets/img/<?php echo $film['img']; ?>"/>
+                    
+                    <p>Available: <?php echo $film['available'] ? 'Yes' : 'No'; ?></p>
+                    
+                    <p>Category: <?php echo getCategoryById($film['idcategory']) ; ?></p>
+                    <div id="ShowCorrectBtn">
+                    <?php
+
+                        if($film['available']==true){
+                            echo "<a href='rent.php?idfilm=" . $film["idfilm"] . "'><button>Rent this film</button></a>";
+                        }else{
+                            echo "<a href='devolution.php?idfilm=" . $film["idfilm"] . "'><button onclick=\"returnFilm(" . $film['idfilm'] . ")\">Return this film</button></a>";
+                        }
+
+
+                        
+                    ?>
+                    </div>
+
+                    
+                </div>
+                <?php
+            }
+
+
+        ?>
+    </div>
 
     <?php
 include("./templates/footer.php");

@@ -7,43 +7,17 @@ $(".password").keyup((e)=>{
 });
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    var buttons = document.querySelectorAll(".category-button");
-    buttons.forEach(function(button) {
-        button.addEventListener("click", function() {
-            var categoryId = this.dataset.idcategory;
-            showFilmsByCategory(categoryId); 
-        });
-    });
-});
-
-function showFilmsByCategory(categoryId) {
-    var filmsContainer = document.getElementById('films-container');
-    filmsContainer.innerHTML = '';
-
-    fetch("user.php?category=" + categoryId)
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(film => {
-                var filmElement = document.createElement('div');
-                filmElement.classList.add('film');
-
-                var imageElement = document.createElement('img');
-                imageElement.src = film.img;
-                filmElement.appendChild(imageElement);
-
-                var nameElement = document.createElement('p');
-                nameElement.textContent = film.name;
-                filmElement.appendChild(nameElement);
-
-                var availableElement = document.createElement('p');
-                availableElement.textContent = 'Available: ' + (film.available ? 'Yes' : 'No');
-                filmElement.appendChild(availableElement);
-
-                filmsContainer.appendChild(filmElement);
-            });
-        })
-        .catch(error => {
-            console.error("Error fetching films:", error);
-        });
+function returnFilm(idfilm){
+fetch("devolution.php", {
+    method: 'POST',
+    body: JSON.stringify({idfilm: idfilm}),
+    headers: {
+        'Content-Type': 'application/json'
+    },
+}).then(response=>response.json())
+.then(data=>()=>{
+    let link = `<a href='rent.php?idfilm=${data.idfilm}'><button>Rent this film</button></a>`;
+   
+    document.getElementById("ShowCorrectBtn").innerHTML = link;
+})
 }
